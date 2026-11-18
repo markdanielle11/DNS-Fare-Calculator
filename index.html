@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="fil">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DNS Sukli</title>
+<meta name="description" content="Fare at sukli calculator para sa Diesel n' Steel (Roblox). Hindi opisyal na fan tool.">
+<meta name="theme-color" content="#f5b81c">
+<meta property="og:title" content="DNS Sukli">
+<meta property="og:description" content="Fare at sukli calculator para sa Diesel n' Steel (Roblox).">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f5b81c'/%3E%3Ctext x='32' y='41' font-family='monospace' font-size='24' font-weight='700' text-anchor='middle' fill='%231a1300'%3EDNS%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0..1,0&display=block">
+<style>
+  :root {
+    --bg: #e4e9ec;
+    --surface: #ffffff;
+    --surface-2: #f0f3f5;
+    --chip: #eaeff2;
+    --fg: #10151a;
+    --muted: #55626c;
+    --line: #d3dade;
+    --edge: #b3bec6;
+    --accent: #f5b81c;
+    --on-accent: #1a1300;
+    --bad: #c62828;
+    --on-bad: #ffffff;
+    --shadow: rgba(20, 38, 50, 0.22);
+    --radius: 12px;
+    --radius-lg: 18px;
+    --font-ui: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-num: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #090c0f;
+      --surface: #14191d;
+      --surface-2: #1c2328;
+      --chip: #232c33;
+      --fg: #eef1f3;
+      --muted: #97a4ac;
+      --line: #29333a;
+      --edge: #46535d;
+      --accent: #f5b81c;
+      --on-accent: #1a1300;
+      --bad: #ff8a80;
+      --on-bad: #1a0300;
+      --shadow: rgba(0, 0, 0, 0.6);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #090c0f;
+    --surface: #14191d;
+    --surface-2: #1c2328;
+    --chip: #232c33;
+    --fg: #eef1f3;
+    --muted: #97a4ac;
+    --line: #29333a;
+    --edge: #46535d;
+    --accent: #f5b81c;
+    --on-accent: #1a1300;
+    --bad: #ff8a80;
+    --on-bad: #1a0300;
+    --shadow: rgba(0, 0, 0, 0.6);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-ui);
+    font-size: 16px;
+    line-height: 1.35;
+    padding-block: 12px 36px;
+    padding-left: max(14px, env(safe-area-inset-left, 0px));
+    padding-right: max(14px, env(safe-area-inset-right, 0px));
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    height: env(safe-area-inset-top, 0px);
+    background: var(--bg);
+    z-index: 10;
+  }
+  button, input { font: inherit; color: inherit; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  [hidden] { display: none !important; }
+
+  .ms {
+    font-family: "Material Symbols Rounded";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 22px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    direction: ltr;
+    width: 1em;
+    height: 1em;
+    overflow: hidden;
+    flex: none;
+    user-select: none;
+    font-feature-settings: "liga";
+    -webkit-font-smoothing: antialiased;
+    font-variation-settings: "FILL" 0, "wght" 500, "opsz" 24;
+  }
+
+  .app { max-width: 980px; margin: 0 auto; display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+  .mark {
+    display: inline-grid;
+    place-items: center;
+    height: 34px;
+    padding: 0 9px;
+    border-radius: 10px;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-family: var(--font-num);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+  }
+  .tag { margin: 0; color: var(--muted); font-size: 0.85rem; }
+
+  .result {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 14px 12px 12px;
+    display: grid;
+    gap: 10px;
+    overflow: hidden;
+    box-shadow: 0 18px 34px -22px var(--shadow);
+  }
+  .result::before { content: ""; position: absolute; inset: 0 0 auto; height: 5px; background: var(--accent); }
+  .rhead { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .pills { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px 4px 7px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+  .pill .ms { font-size: 18px; }
+  .pill b { font-family: var(--font-num); }
+  .next {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 42px;
+    padding: 6px 14px 6px 10px;
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--fg);
+    color: var(--surface);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.08s ease, opacity 0.12s ease;
+  }
+  .next:hover { opacity: 0.88; }
+  .next:active { transform: scale(0.97); }
+  .kbd {
+    display: none;
+    padding: 1px 6px;
+    border-radius: 6px;
+    border: 1px solid currentColor;
+    font-family: var(--font-num);
+    font-size: 0.7rem;
+    opacity: 0.7;
+  }
+  @media (hover: hover) and (pointer: fine) { .kbd { display: inline-block; } }
+  .path { margin: 0; display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.98rem; min-width: 0; }
+  .path .ms { color: var(--muted); font-size: 20px; }
+  .pair2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .stat { background: var(--surface-2); border-radius: var(--radius); padding: 8px 12px; min-width: 0; }
+  .stat span { display: block; font-size: 0.78rem; color: var(--muted); }
+  .stat b { display: block; font-family: var(--font-num); font-weight: 600; font-size: 1.45rem; line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .stat small { display: block; min-height: 1.1em; font-family: var(--font-num); font-size: 0.72rem; color: var(--muted); }
+  .change {
+    border-radius: var(--radius);
+    background: var(--accent);
+    color: var(--on-accent);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 76px;
+  }
+  .change .label { font-weight: 600; font-size: 1rem; }
+  .change .amount { font-family: var(--font-num); font-weight: 700; font-size: 3rem; line-height: 1; font-variant-numeric: tabular-nums; }
+  .change .amount.text { font-family: var(--font-ui); font-size: 1.05rem; font-weight: 600; text-align: right; }
+  .change .amount.pop { animation: pop 0.18s ease-out; }
+  .change.short { background: var(--bad); color: var(--on-bad); }
+  .change.idle { background: var(--surface-2); color: var(--muted); }
+  @keyframes pop { from { transform: scale(0.92); } to { transform: scale(1); } }
+
+  .controls { display: grid; gap: 12px; min-width: 0; }
+  .card {
+    min-width: 0;
+    margin: 0;
+    padding: 14px;
+    display: grid;
+    gap: 12px;
+    align-content: start;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+  }
+  legend { float: left; width: 100%; padding: 0; margin: 0 0 12px; }
+  legend + * { clear: both; }
+  .lg { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1rem; }
+  .lg .ms { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; background: var(--surface-2); font-size: 20px; padding: 6px; }
+
+  .seg { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .stops { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+  .count { display: grid; gap: 10px; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .two { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); }
+  .paid { display: grid; gap: 10px; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.3fr); }
+  .disc { display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .chip {
+    min-height: 52px;
+    padding: 6px 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: var(--radius);
+    border: 1.5px solid var(--edge);
+    background: var(--chip);
+    color: var(--fg);
+    font-weight: 500;
+    font-size: 0.98rem;
+    line-height: 1.15;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.08s ease, background-color 0.12s ease, border-color 0.12s ease;
+  }
+  .chip:hover { border-color: var(--fg); }
+  .chip:active { transform: scale(0.96); }
+  .chip[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+    font-weight: 700;
+  }
+  .chip[aria-pressed="true"] .ms { font-variation-settings: "FILL" 1, "wght" 500, "opsz" 24; }
+  .chip:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+  .chip.num { font-family: var(--font-num); font-weight: 600; font-size: 1.2rem; }
+
+  .amt {
+    min-height: 52px;
+    width: 100%;
+    min-width: 0;
+    padding: 6px 10px;
+    border-radius: var(--radius);
+    border: 1.5px solid var(--edge);
+    background: var(--surface);
+    font-family: var(--font-num);
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: center;
+  }
+  .amt::placeholder { color: var(--muted); font-family: var(--font-ui); font-weight: 400; font-size: 0.92rem; }
+  .err { margin: 0; color: var(--bad); font-size: 0.85rem; font-weight: 500; }
+
+  .foot { display: grid; gap: 8px; padding-inline: 2px; }
+  .note { margin: 0; color: var(--muted); font-size: 0.8rem; max-width: 70ch; }
+  .how summary { cursor: pointer; color: var(--muted); font-size: 0.85rem; font-weight: 600; width: fit-content; }
+  .how .note { margin-top: 8px; }
+  .keys { display: none; }
+  @media (hover: hover) and (pointer: fine) { .keys { display: block; } }
+
+  @media (min-width: 820px) {
+    body { padding-block: 28px 48px; }
+    .app { grid-template-columns: minmax(0, 1fr) 350px; align-items: start; column-gap: 24px; row-gap: 18px; }
+    .top, .foot { grid-column: 1 / -1; }
+    .brand { font-size: 1.5rem; }
+    .mark { height: 38px; }
+    .controls { grid-column: 1; grid-row: 2; }
+    .result { grid-column: 2; grid-row: 2; top: max(24px, env(safe-area-inset-top, 0px)); padding: 18px 16px 16px; gap: 12px; }
+    .change { min-height: 100px; }
+    .change .amount { font-size: 3.7rem; }
+  }
+  @media (max-width: 819px) {
+    .tag { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chip, .next { transition: none; }
+    .chip:active, .next:active { transform: none; }
+    .change .amount.pop { animation: none; }
+  }
+</style>
+
+<style>:root{color-scheme:light}</style>
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <h1 class="brand"><span class="mark">DNS</span>Sukli</h1>
+    <p class="tag">Diesel n' Steel fare calculator</p>
+  </header>
+
+  <section class="result" aria-label="Resulta">
+    <div class="rhead">
+      <div class="pills">
+        <span class="pill"><i class="ms" aria-hidden="true">group</i><b id="pPax">1</b></span>
+        <span class="pill"><i class="ms" aria-hidden="true" id="pDiscIcon">person</i><span id="pDisc">Regular</span></span>
+      </div>
+      <button type="button" class="next" id="nextBtn"><i class="ms" aria-hidden="true">skip_next</i>Susunod <span class="kbd">Enter</span></button>
+    </div>
+    <p class="path" id="outPath" hidden><span id="pFrom"></span><i class="ms" aria-hidden="true">arrow_forward</i><span id="pTo"></span></p>
+    <div class="pair2">
+      <div class="stat"><span>Fare</span><b id="outFare">-</b><small id="outEach"></small></div>
+      <div class="stat"><span>Binayad</span><b id="outPaid">-</b><small></small></div>
+    </div>
+    <div id="changeBox" class="change idle" aria-live="polite">
+      <span class="label" id="changeLabel">Sukli</span>
+      <span class="amount text" id="changeAmount">Pumili ng destinasyon</span>
+    </div>
+  </section>
+
+  <div class="controls">
+    <fieldset class="card">
+      <legend><span class="lg"><i class="ms" aria-hidden="true">route</i>Route</span></legend>
+      <div class="seg" id="routes" role="group" aria-label="Route"></div>
+      <div class="seg" id="dirs" role="group" aria-label="Direksyon" hidden></div>
+    </fieldset>
+
+    <fieldset class="card">
+      <legend><span class="lg"><i class="ms" aria-hidden="true">my_location</i>Sakay</span></legend>
+      <div class="seg" id="boards" role="group" aria-label="Saan sumakay"></div>
+      <div class="stops" id="pickups" role="group" aria-label="Barangay kung saan sumakay" hidden></div>
+    </fieldset>
+
+    <fieldset class="card">
+      <legend><span class="lg"><i class="ms" aria-hidden="true">flag</i>Pupunta</span></legend>
+      <div class="stops" id="stops" role="group" aria-label="Destinasyon ng pasahero"></div>
+    </fieldset>
+
+    <div class="two">
+      <fieldset class="card">
+        <legend><span class="lg"><i class="ms" aria-hidden="true">group</i>Pasahero</span></legend>
+        <div class="count" id="paxes" role="group" aria-label="Bilang ng pasahero"></div>
+      </fieldset>
+      <fieldset class="card">
+        <legend><span class="lg"><i class="ms" aria-hidden="true">sell</i>Discount</span></legend>
+        <div class="disc" id="discs" role="group" aria-label="Discount para sa lahat ng pasahero"></div>
+      </fieldset>
+    </div>
+
+    <fieldset class="card">
+      <legend><span class="lg"><i class="ms" aria-hidden="true">payments</i>Binayad</span></legend>
+      <div class="paid">
+        <div style="display: contents" id="bills"></div>
+        <input class="amt" id="paidInput" type="text" inputmode="numeric" autocomplete="off" placeholder="Iba pa" aria-label="Ibang halaga ng binayad, hanggang 100 piso" aria-describedby="paidErr">
+      </div>
+      <p class="err" id="paidErr" role="alert" hidden>Hanggang ₱100 lang ang bayad.</p>
+    </fieldset>
+  </div>
+
+  <footer class="foot">
+    <p class="note keys">Keyboard: 1 hanggang 5 pasahero, Z discount, S terminal o hindi, Q W E para sa ₱20 ₱50 ₱100, Enter susunod.</p>
+    <details class="how">
+      <summary>Paano kinukuwenta ang fare?</summary>
+      <p class="note">Batay sa Fare Matrix ng Diesel n' Steel wiki: ₱14 ang minimum fare para sa unang apat na barangay, dagdag ₱2 kada barangay pagkatapos, at ₱2 ang bawas ng Student at Senior (lahat ng pasahero sa isang bayad). Kapag nasa terminal ang pasahero, binibilang mula sa dulo ng route. Kapag hindi, binibilang mula sa sakayan hanggang sa bababaan, kasama ang dalawa. Mali ang sukli, bawas ang EXP, kaya i-check sa laro kung may nagbago sa presyo.</p>
+    </details>
+  </footer>
+</main>
+
+<script>
+  var BASE = 14;
+  var STEP = 2;
+  var DISCOUNT = 2;
+  var FREE_BARANGAYS = 4;
+  var MAX_PAX = 5;
+  var MAX_PAID = 100;
+  var BILLS = [20, 50, 100];
+  var ROUTES = {
+    balagtas: {
+      name: 'Balagtas',
+      dirs: null,
+      stops: [['Matungao', 2], ['Panginay Guiguinto', 3], ['Panginay Balagtas', 4], ['Wawa', 5]]
+    },
+    guiguinto: {
+      name: 'Guiguinto',
+      dirs: null,
+      stops: [['Matungao', 2], ['MacArthur Highway', 3], ['BSU', 4], ['Tuktukan', 4]]
+    },
+    malolos: {
+      name: 'Malolos',
+      dirs: {
+        out: { label: 'Bulakan → Malolos', stops: [
+          ['Maysantol', 2], ['San Nicolas', 3], ['Pitpitan', 4], ['Mambog', 5], ['Matimbo', 6],
+          ['Panasahan', 7], ['Bagna', 8], ['Atlag', 9], ['San Juan / Sto. Rosario', 10]
+        ] },
+        back: { label: 'Malolos → Bulakan', stops: [
+          ['Atlag', 2], ['Bagna', 3], ['Panasahan', 4], ['Matimbo', 5], ['Mambog', 6],
+          ['Pitpitan', 7], ['San Nicolas', 8], ['Maysantol', 9], ['Bagumbayan / San Jose', 10]
+        ] }
+      }
+    }
+  };
+
+  function stopsFor(routeKey, dirKey) {
+    var r = ROUTES[routeKey];
+    return r.dirs ? r.dirs[dirKey].stops : r.stops;
+  }
+  function countBetween(fromPos, toPos) {
+    return Math.abs(toPos - fromPos) + 1;
+  }
+  function fareFor(count, discounted) {
+    return BASE + STEP * Math.max(0, count - FREE_BARANGAYS) - (discounted ? DISCOUNT : 0);
+  }
+  function changeOf(fare, paid) {
+    return paid - fare;
+  }
+
+  var state = { route: 'balagtas', dir: 'out', board: 'terminal', pickup: null, stop: 3, pax: 1, disc: false, paid: 20 };
+  try {
+    var saved = JSON.parse(localStorage.getItem('dns-sukli') || '{}');
+    if (saved && ROUTES[saved.route]) {
+      state.route = saved.route;
+      state.dir = saved.dir === 'back' ? 'back' : 'out';
+      state.stop = null;
+      state.paid = null;
+    }
+  } catch (e) {}
+
+  function remember() {
+    try { localStorage.setItem('dns-sukli', JSON.stringify({ route: state.route, dir: state.dir })); } catch (e) {}
+  }
+  function el(id) { return document.getElementById(id); }
+  function peso(n) { return '₱' + n; }
+  function makeChip(label, cls, onClick, icon) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip' + (cls ? ' ' + cls : '');
+    if (icon) {
+      var i = document.createElement('i');
+      i.className = 'ms';
+      i.setAttribute('aria-hidden', 'true');
+      i.textContent = icon;
+      b.appendChild(i);
+    }
+    b.appendChild(document.createTextNode(label));
+    b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', function (ev) {
+      onClick();
+      if (ev.detail > 0) { b.blur(); }
+    });
+    return b;
+  }
+  function press(b, on) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+
+  var routeChips = {}, dirChips = {}, boardChips = [], pickupChips = [], stopChips = [], paxChips = [], discChips = [], billChips = [];
+  var input = el('paidInput');
+  var err = el('paidErr');
+  var lastShown = '';
+
+  function isDirected() { return !!ROUTES[state.route].dirs; }
+  function destOk(i) {
+    if (state.board === 'terminal' || state.pickup === null) { return true; }
+    return isDirected() ? i > state.pickup : i !== state.pickup;
+  }
+  function pickupOk(i) {
+    return isDirected() ? i < stopsFor(state.route, state.dir).length - 1 : true;
+  }
+
+  function setPax(n) {
+    state.pax = n;
+    render();
+  }
+  function setDisc(on) {
+    state.disc = on;
+    render();
+  }
+  function setPaid(n) {
+    state.paid = n;
+    input.value = '';
+    err.hidden = true;
+    render();
+  }
+  function setBoard(b) {
+    state.board = b;
+    if (b === 'terminal') { state.pickup = null; }
+    render();
+  }
+  function setPickup(i) {
+    state.pickup = i;
+    if (state.stop !== null && !destOk(state.stop)) { state.stop = null; }
+    render();
+  }
+  function setRoute(k) {
+    if (state.route === k) { return; }
+    state.route = k;
+    state.stop = null;
+    state.pickup = null;
+    remember();
+    buildStops();
+    render();
+  }
+  function setDir(d) {
+    if (state.dir === d) { return; }
+    state.dir = d;
+    state.stop = null;
+    state.pickup = null;
+    remember();
+    buildStops();
+    render();
+  }
+  function nextPassenger() {
+    state.stop = null;
+    state.board = 'terminal';
+    state.pickup = null;
+    state.pax = 1;
+    state.disc = false;
+    state.paid = null;
+    input.value = '';
+    err.hidden = true;
+    render();
+  }
+
+  function buildStops() {
+    var list = stopsFor(state.route, state.dir);
+    var stopBox = el('stops');
+    var pickBox = el('pickups');
+    stopBox.textContent = '';
+    pickBox.textContent = '';
+    stopChips = [];
+    pickupChips = [];
+    list.forEach(function (s, i) {
+      var c = makeChip(s[0], '', function () { state.stop = i; render(); });
+      stopChips.push(c);
+      stopBox.appendChild(c);
+      var p = makeChip(s[0], '', function () { setPickup(i); });
+      pickupChips.push(p);
+      pickBox.appendChild(p);
+    });
+  }
+
+  function buildStatic() {
+    var routesBox = el('routes');
+    Object.keys(ROUTES).forEach(function (k) {
+      var c = makeChip(ROUTES[k].name, '', function () { setRoute(k); });
+      routeChips[k] = c;
+      routesBox.appendChild(c);
+    });
+    var dirsBox = el('dirs');
+    ['out', 'back'].forEach(function (d) {
+      var c = makeChip(ROUTES.malolos.dirs[d].label, '', function () { setDir(d); });
+      dirChips[d] = c;
+      dirsBox.appendChild(c);
+    });
+    var boardsBox = el('boards');
+    var atTerminal = makeChip('Terminal', '', function () { setBoard('terminal'); }, 'departure_board');
+    var elsewhere = makeChip('Ibang barangay', '', function () { setBoard('other'); }, 'pin_drop');
+    boardChips = [atTerminal, elsewhere];
+    boardsBox.appendChild(atTerminal);
+    boardsBox.appendChild(elsewhere);
+    var paxBox = el('paxes');
+    for (var p = 1; p <= MAX_PAX; p++) {
+      (function (n) {
+        var c = makeChip(String(n), 'num', function () { setPax(n); });
+        paxChips.push(c);
+        paxBox.appendChild(c);
+      })(p);
+    }
+    var discBox = el('discs');
+    var regular = makeChip('Regular', '', function () { setDisc(false); }, 'person');
+    var discounted = makeChip('Discount', '', function () { setDisc(true); }, 'percent');
+    discChips = [regular, discounted];
+    discBox.appendChild(regular);
+    discBox.appendChild(discounted);
+    var billBox = el('bills');
+    BILLS.forEach(function (b) {
+      var c = makeChip(peso(b), 'num', function () { setPaid(b); });
+      billChips.push(c);
+      billBox.appendChild(c);
+    });
+  }
+
+  function render() {
+    Object.keys(routeChips).forEach(function (k) { press(routeChips[k], state.route === k); });
+    el('dirs').hidden = !isDirected();
+    Object.keys(dirChips).forEach(function (d) { press(dirChips[d], state.dir === d); });
+    press(boardChips[0], state.board === 'terminal');
+    press(boardChips[1], state.board === 'other');
+    el('pickups').hidden = state.board !== 'other';
+    pickupChips.forEach(function (c, i) {
+      press(c, state.pickup === i);
+      c.disabled = !pickupOk(i);
+    });
+    stopChips.forEach(function (c, i) {
+      press(c, state.stop === i);
+      c.disabled = !destOk(i);
+    });
+    paxChips.forEach(function (c, i) { press(c, state.pax === i + 1); });
+    press(discChips[0], !state.disc);
+    press(discChips[1], state.disc);
+    billChips.forEach(function (c, i) { press(c, state.paid === BILLS[i]); });
+
+    var list = stopsFor(state.route, state.dir);
+    var stop = state.stop === null ? null : list[state.stop];
+    var fromPos = null;
+    var fromName = '';
+    if (state.board === 'terminal') {
+      fromPos = 1;
+      fromName = 'Terminal';
+    } else if (state.pickup !== null) {
+      fromPos = list[state.pickup][1];
+      fromName = list[state.pickup][0];
+    }
+    var each = stop && fromPos !== null ? fareFor(countBetween(fromPos, stop[1]), state.disc) : null;
+    var fare = each === null ? null : each * state.pax;
+
+    el('pPax').textContent = state.pax;
+    el('pDisc').textContent = state.disc ? 'Discount' : 'Regular';
+    el('pDiscIcon').textContent = state.disc ? 'percent' : 'person';
+    el('outPath').hidden = !(stop && fromPos !== null);
+    el('pFrom').textContent = fromName;
+    el('pTo').textContent = stop ? stop[0] : '';
+    el('outFare').textContent = fare === null ? '-' : peso(fare);
+    el('outEach').textContent = each === null ? '' : peso(each) + ' x ' + state.pax;
+    el('outPaid').textContent = state.paid === null ? '-' : peso(state.paid);
+
+    var box = el('changeBox');
+    var label = el('changeLabel');
+    var amt = el('changeAmount');
+    box.className = 'change';
+    amt.className = 'amount';
+    label.textContent = 'Sukli';
+    var isNumber = false;
+    if (stop === null) {
+      box.className = 'change idle';
+      amt.className = 'amount text';
+      amt.textContent = 'Pumili ng destinasyon';
+    } else if (fare === null) {
+      box.className = 'change idle';
+      amt.className = 'amount text';
+      amt.textContent = 'Pumili ng sakayan';
+    } else if (state.paid === null) {
+      box.className = 'change idle';
+      amt.className = 'amount text';
+      amt.textContent = 'Ilagay ang binayad';
+    } else {
+      var c = changeOf(fare, state.paid);
+      if (c < 0) {
+        box.className = 'change short';
+        label.textContent = 'Kulang';
+        amt.textContent = peso(-c);
+        isNumber = true;
+      } else if (c === 0) {
+        amt.className = 'amount text';
+        amt.textContent = 'Sakto, walang sukli';
+      } else {
+        amt.textContent = peso(c);
+        isNumber = true;
+      }
+    }
+    var shown = label.textContent + amt.textContent;
+    if (isNumber && shown !== lastShown) {
+      amt.classList.remove('pop');
+      void amt.offsetWidth;
+      amt.classList.add('pop');
+    }
+    lastShown = shown;
+  }
+
+  input.addEventListener('input', function (e) {
+    var v = e.target.value.replace(/[^0-9]/g, '');
+    if (v !== e.target.value) { e.target.value = v; }
+    var n = v === '' ? null : parseInt(v, 10);
+    var tooMuch = n !== null && n > MAX_PAID;
+    err.hidden = !tooMuch;
+    state.paid = tooMuch ? null : n;
+    render();
+  });
+  el('nextBtn').addEventListener('click', function (ev) {
+    nextPassenger();
+    if (ev.detail > 0) { ev.currentTarget.blur(); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey || e.metaKey || e.altKey) { return; }
+    var t = e.target;
+    var tag = t && t.tagName;
+    if (tag === 'INPUT' || tag === 'SUMMARY') { return; }
+    if (e.key === 'Enter') {
+      if (tag === 'BUTTON') { return; }
+      e.preventDefault();
+      nextPassenger();
+      return;
+    }
+    var k = e.key.toLowerCase();
+    if (k >= '1' && k <= '5') { setPax(parseInt(k, 10)); return; }
+    if (k === 'q') { setPaid(20); return; }
+    if (k === 'w') { setPaid(50); return; }
+    if (k === 'e') { setPaid(100); return; }
+    if (k === 'z') { setDisc(!state.disc); return; }
+    if (k === 's') { setBoard(state.board === 'terminal' ? 'other' : 'terminal'); }
+  });
+
+  buildStatic();
+  buildStops();
+  render();
+</script>
+</body>
+</html>
